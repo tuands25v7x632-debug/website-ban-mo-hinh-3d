@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace App\Support;
 
+use App\Models\Database;
+use Throwable;
+
 final class Auth
 {
     public static function userId(): ?int
@@ -29,6 +32,7 @@ final class Auth
     public static function login(array $user): void
     {
         session_regenerate_id(true);
+        unset($_SESSION['csrf_token']);
         $_SESSION['user_id'] = (int) $user['id'];
         $_SESSION['user_name'] = (string) $user['name'];
         $_SESSION['user_role'] = (string) $user['role'];
@@ -43,13 +47,32 @@ final class Auth
 
     public static function requireCustomer(): void
     {
-        if (self::userId() === null) {
+        $id = self::userId();
+        if ($id === null) {
             header('Location: /login', true, 303);
             exit;
         }
-        if (!self::isCustomer()) {
+        // Quyền phải được kiểm tra ở CSDL, không chỉ dựa vào vai trò cũ trong Session.
+        try {
+            $stmt = Database::connect()->prepare('SELECT name, role FROM users WHERE id = :id LIMIT 1');
+            $stmt->execute(['id' => $id]);
+            $user = $stmt->fetch();
+        } catch (Throwable $exception) {
+            error_log($exception->getMessage());
+            http_response_code(503);
+            exit('Dịch vụ tạm thời không khả dụng.');
+        }
+        if (!$user) {
+            self::logout();
+            header('Location: /login', true, 303);
+            exit;
+        }
+        $_SESSION['user_name'] = (string) $user['name'];
+        $_SESSION['user_role'] = (string) $user['role'];
+        if ($user['role'] !== 'customer') {
             http_response_code(403);
-            exit('403 - Chỉ khách hàng mới được đặt hàng.');
+            exit('403 - Chỉ khách hàng mới có thể xem hoặc đặt đơn hàng.');
         }
     }
+
 }
