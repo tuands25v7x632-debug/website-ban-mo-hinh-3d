@@ -77,7 +77,7 @@ final class OrderController
                  VALUES (:oid, :pid, :qty, :price)'
             );
             $stockStmt = $pdo->prepare(
-                'UPDATE products SET stock = stock - :qty WHERE id = :pid AND stock >= :qty'
+                'UPDATE products SET stock = stock - :qty_decrease WHERE id = :pid AND stock >= :qty_check'
             );
             foreach ($items as $item) {
                 $quantity = (int) $item['quantity'];
@@ -87,7 +87,7 @@ final class OrderController
                     'qty' => $quantity,
                     'price' => $item['price'],
                 ]);
-                $stockStmt->execute(['qty' => $quantity, 'pid' => (int) $item['id']]);
+                $stockStmt->execute(['qty_decrease' => $quantity, 'pid' => (int) $item['id'], 'qty_check' => $quantity]);
                 if ($stockStmt->rowCount() !== 1) {
                     throw new RuntimeException('Không đủ tồn kho: ' . $item['name']);
                 }
@@ -96,6 +96,14 @@ final class OrderController
             $_SESSION['cart'] = [];
             Cart::message('success', 'Đặt hàng thành công! Mã đơn hàng #' . $orderId);
             header('Location: /orders/' . $orderId, true, 303);
+            return;
+        } catch (\PDOException $exception) {
+            if ($pdo instanceof PDO && $pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            error_log($exception->getMessage());
+            Cart::message('danger', 'Không thể xử lý đơn hàng. Vui lòng thử lại.');
+            header('Location: /cart', true, 303);
             return;
         } catch (RuntimeException $exception) {
             if ($pdo instanceof PDO && $pdo->inTransaction()) {
