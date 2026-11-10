@@ -69,7 +69,7 @@ $inStock = (int) $product['stock'] > 0;
               <?php endif; ?>
               <a class="btn btn-outline-primary" href="/#products">Xem sản phẩm khác</a>
             </div>
-            <p class="small text-secondary mt-3">Giỏ hàng lưu tạm bằng PHP Session; chức năng đặt hàng sẽ có ở bước tiếp theo.</p>
+            <p class="small text-secondary mt-3">Giỏ hàng lưu tạm bằng PHP Session. Sau khi thêm sản phẩm, vào giỏ hàng để đặt hàng.</p>
           </div>
         </div>
       </div>
