@@ -60,6 +60,11 @@ final class OrderController
             if ($userId === null) {
                 throw new RuntimeException('Phiên đăng nhập không hợp lệ.');
             }
+            $ownerStmt = $pdo->prepare("SELECT id FROM users WHERE id = :id AND role = 'customer' LIMIT 1");
+            $ownerStmt->execute(['id' => $userId]);
+            if (!$ownerStmt->fetchColumn()) {
+                throw new RuntimeException('Tài khoản không có quyền đặt hàng.');
+            }
 
             $orderStmt = $pdo->prepare(
                 "INSERT INTO orders (user_id, total, status) VALUES (:uid, :total, 'pending')"
