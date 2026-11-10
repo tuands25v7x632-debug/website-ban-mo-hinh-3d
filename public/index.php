@@ -1,6 +1,14 @@
 <?php
 declare(strict_types=1);
 
+// HTTP headers bảo vệ cơ bản; chạy localhost HTTP chỉ phục vụ học và kiểm thử.
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: DENY');
+header('Referrer-Policy: strict-origin-when-cross-origin');
+header('Cache-Control: no-store, max-age=0');
+header('Pragma: no-cache');
+
+
 // Phiên làm việc cho giỏ hàng. Cookie chỉ truy cập qua HTTP; production cần HTTPS.
 ini_set('session.use_strict_mode', '1');
 ini_set('session.use_only_cookies', '1');
@@ -54,7 +62,12 @@ if ($path === '/login') {
     if ($method === 'GET') { $auth->loginForm(); exit; }
     if ($method === 'POST') { $auth->login(); exit; }
 }
-if ($path === '/logout' && $method === 'POST') {
+if ($path === '/logout') {
+    if ($method !== 'POST') {
+        http_response_code(405);
+        header('Allow: POST');
+        exit('405 - Method Not Allowed');
+    }
     $auth->logout();
     exit;
 }
@@ -71,7 +84,7 @@ if (is_string($path) && preg_match('~^/orders/([^/]+)/?$~D', $path, $matches) ==
     (new OrderController())->show($matches[1]);
     exit;
 }
-if (in_array($path, ['/register', '/login', '/logout', '/checkout', '/orders'], true) && $method !== 'GET' && $method !== 'POST') {
+if (in_array($path, ['/register', '/login', '/checkout'], true) && !in_array($method, ['GET', 'POST'], true)) {
     http_response_code(405);
     header('Allow: GET, POST');
     exit('405 - Method Not Allowed');

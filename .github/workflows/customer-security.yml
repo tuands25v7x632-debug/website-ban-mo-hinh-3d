@@ -1,0 +1,26 @@
+name: Customer PHP security checks
+
+on:
+  push:
+    branches:
+      - feature/customer-security
+  pull_request:
+
+jobs:
+  php-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer:v2
+          coverage: none
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress
+      - name: Lint all PHP files
+        run: find app public tests config -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: Check Composer autoload
+        run: composer dump-autoload --strict-psr
+      - name: Test session and CSRF helpers
+        run: php tests/security-smoke.php
