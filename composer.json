@@ -1,0 +1,13 @@
+{
+  "name": "student/shop3d",
+  "description": "Website quan ly ban mo hinh in 3D - CT275",
+  "type": "project",
+  "require": {
+    "php": "^8.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  }
+}

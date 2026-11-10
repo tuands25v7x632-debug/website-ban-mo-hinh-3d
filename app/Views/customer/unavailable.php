@@ -1,0 +1,3 @@
+<?php declare(strict_types=1); ?>
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tạm thời không khả dụng – 3D Model Shop</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"></head>
+<body class="bg-light"><nav class="navbar navbar-dark bg-dark"><div class="container"><a href="/" class="navbar-brand fw-bold">3D MODEL SHOP</a></div></nav><main class="container py-5"><div class="alert alert-warning"><h1 class="h4">Tạm thời không thể tải sản phẩm</h1><p>Không thể kết nối cơ sở dữ liệu. Vui lòng thử lại sau.</p><a href="/" class="btn btn-outline-dark">Về trang chủ</a></div></main></body></html>
