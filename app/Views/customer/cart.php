@@ -53,7 +53,7 @@ $csrfToken = Cart::csrfToken();
 </div></article>
 <?php endforeach; ?>
 </div>
-<aside class="col-lg-4"><div class="card border-0 shadow-sm"><div class="card-body p-4"><h2 class="h5 fw-bold">Tóm tắt giỏ hàng</h2><hr><div class="d-flex justify-content-between mb-3"><span>Tổng cộng</span><strong class="text-danger fs-4"><?= $money($total) ?></strong></div><p class="text-secondary small">Giá và tồn kho được đọc lại từ MySQL khi xem giỏ hàng. Chưa bao gồm phí vận chuyển.</p><button class="btn btn-secondary w-100" disabled>Đặt hàng (thực hiện ở Bước 5)</button><a href="/#products" class="btn btn-outline-primary w-100 mt-2">Tiếp tục mua sắm</a></div></div></aside>
+<aside class="col-lg-4"><div class="card border-0 shadow-sm"><div class="card-body p-4"><h2 class="h5 fw-bold">Tóm tắt giỏ hàng</h2><hr><div class="d-flex justify-content-between mb-3"><span>Tổng cộng</span><strong class="text-danger fs-4"><?= $money($total) ?></strong></div><p class="text-secondary small">Giá và tồn kho được đọc lại từ MySQL khi xem giỏ hàng. Chưa bao gồm phí vận chuyển.</p><a class="btn btn-success w-100" href="/checkout">Tiến hành đặt hàng</a><a href="/#products" class="btn btn-outline-primary w-100 mt-2">Tiếp tục mua sắm</a></div></div></aside>
 </div>
 <?php endif; ?>
 </main>
