@@ -206,16 +206,18 @@ final class OrderController
 
     private function total(array $items): string
     {
-        // Giá CSDL ở đơn vị VND nguyên, cộng thành số nguyên để không sai số float.
-        $sum = 0;
+        // Dùng phép tính số nguyên theo đơn vị nhỏ nhất để giữ chính xác DECIMAL(12,2).
+        $sumCents = 0;
         foreach ($items as $item) {
             $price = (string) $item['price'];
-            if (!preg_match('/^\d+(?:\.\d{1,2})?$/', $price)) {
+            if (!preg_match('/^(\d+)(?:\.(\d{1,2}))?$/', $price, $parts)) {
                 throw new RuntimeException('Giá sản phẩm không hợp lệ.');
             }
-            $sum += (int) round((float) $price * (int) $item['quantity']);
+            $cents = (int) $parts[1] * 100
+                + (int) str_pad($parts[2] ?? '', 2, '0');
+            $sumCents += $cents * (int) $item['quantity'];
         }
-        return (string) $sum;
+        return intdiv($sumCents, 100) . '.' . str_pad((string) ($sumCents % 100), 2, '0', STR_PAD_LEFT);
     }
 
     private function notFound(): void
