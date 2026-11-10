@@ -1,0 +1,3 @@
+<?php declare(strict_types=1); ?>
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Không tìm thấy sản phẩm – 3D Model Shop</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"></head>
+<body class="bg-light"><nav class="navbar navbar-dark bg-dark"><div class="container"><a href="/" class="navbar-brand fw-bold">3D MODEL SHOP</a></div></nav><main class="container py-5 text-center"><h1 class="display-5 fw-bold">404 – Không tìm thấy sản phẩm</h1><p class="text-secondary">Sản phẩm không tồn tại hoặc đã được gỡ khỏi cửa hàng.</p><a class="btn btn-primary" href="/#products">Quay lại danh sách sản phẩm</a></main></body></html>
