@@ -1,9 +1,5 @@
 # Website quản lý bán mô hình in 3D
 
-Dự án nhóm CT275 – Công nghệ Web, học kỳ 1 (2026–2027).
-
-## Phạm vi phiên bản hiện tại
-**Bước 1:** khởi tạo MVC, Composer PSR-4, PDO và trang kiểm tra hệ thống. Các chức năng mua hàng chưa hoàn thành.
 
 ## Yêu cầu
 - PHP 8.3+, extension pdo_mysql
