@@ -39,7 +39,7 @@ final class AuthController
         $confirm = is_string($_POST['confirm_password'] ?? null) ? $_POST['confirm_password'] : '';
         $errors = [];
 
-        if ($name === '' || mb_strlen($name) > 120) {
+        if ($name === '' || (function_exists('mb_strlen') ? mb_strlen($name) : strlen($name)) > 120) {
             $errors[] = 'Họ tên phải có từ 1 đến 120 ký tự.';
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 190) {
