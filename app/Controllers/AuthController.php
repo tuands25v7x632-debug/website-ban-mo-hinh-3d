@@ -123,6 +123,7 @@ final class AuthController
         if (count($failures) >= 5) {
             $errors[] = 'Bạn đã thử đăng nhập sai quá nhiều lần. Vui lòng thử lại sau 15 phút.';
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 190 || $password === '') {
+            $_SESSION['login_failures'][] = time();
             $errors[] = 'Email hoặc mật khẩu không chính xác.';
         } else {
             try {
