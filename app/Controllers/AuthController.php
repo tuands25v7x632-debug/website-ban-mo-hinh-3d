@@ -110,7 +110,19 @@ final class AuthController
         $email = strtolower(trim(is_string($_POST['email'] ?? null) ? $_POST['email'] : ''));
         $password = is_string($_POST['password'] ?? null) ? $_POST['password'] : '';
         $errors = [];
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 190 || $password === '') {
+        // Giới hạn 5 lần đăng nhập sai trong 15 phút cho cùng phiên trình duyệt.
+        // Cần thêm rate limit theo IP/tài khoản ở máy chủ khi triển khai công khai.
+        $failures = $_SESSION['login_failures'] ?? [];
+        if (!is_array($failures)) {
+            $failures = [];
+        }
+        $failures = array_values(array_filter($failures, static fn ($time): bool =>
+            is_int($time) && $time > time() - 900
+        ));
+        $_SESSION['login_failures'] = $failures;
+        if (count($failures) >= 5) {
+            $errors[] = 'Bạn đã thử đăng nhập sai quá nhiều lần. Vui lòng thử lại sau 15 phút.';
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 190 || $password === '') {
             $errors[] = 'Email hoặc mật khẩu không chính xác.';
         } else {
             try {
@@ -119,10 +131,12 @@ final class AuthController
                 $stmt->execute(['email' => $email]);
                 $user = $stmt->fetch();
                 if ($user && password_verify($password, (string) $user['password_hash'])) {
+                    unset($_SESSION['login_failures']);
                     Auth::login($user);
                     header('Location: /', true, 303);
                     return;
                 }
+                $_SESSION['login_failures'][] = time();
                 $errors[] = 'Email hoặc mật khẩu không chính xác.';
             } catch (Throwable $exception) {
                 error_log($exception->getMessage());
