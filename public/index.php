@@ -27,12 +27,26 @@ use App\Controllers\ProductController;
 use App\Controllers\CartController;
 use App\Controllers\AuthController;
 use App\Controllers\OrderController;
+use App\Controllers\CatalogController;
+use App\Controllers\AboutController;
 
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
 if ($path === '/' && $method === 'GET') {
     (new HomeController())->index();
+    exit;
+}
+if ($path === '/categories' && $method === 'GET') {
+    (new CatalogController())->categories();
+    exit;
+}
+if ($path === '/products' && $method === 'GET') {
+    (new CatalogController())->products();
+    exit;
+}
+if ($path === '/about' && $method === 'GET') {
+    (new AboutController())->index();
     exit;
 }
 if (is_string($path) && preg_match('~^/products/([^/]+)/?$~D', $path, $matches) === 1 && $method === 'GET') {
