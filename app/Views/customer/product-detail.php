@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+use App\Support\Cart;
 $e = static fn ($value): string => htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 $money = static fn ($value): string => number_format((float) $value, 0, ',', '.') . ' ₫';
 $inStock = (int) $product['stock'] > 0;
@@ -20,7 +21,7 @@ $inStock = (int) $product['stock'] > 0;
 </head>
 <body>
   <nav class="navbar navbar-expand navbar-dark bg-dark">
-    <div class="container"><a class="navbar-brand fw-bold" href="/">3D MODEL SHOP</a><a class="nav-link text-light" href="/#products">Sản phẩm</a></div>
+    <div class="container"><a class="navbar-brand fw-bold" href="/">3D MODEL SHOP</a><div class="d-flex gap-3"><a class="nav-link text-light" href="/#products">Sản phẩm</a><a class="nav-link text-light" href="/cart">🛒 Giỏ hàng (<?= Cart::count() ?>)</a></div></div>
   </nav>
   <main class="container py-4 py-lg-5">
     <nav aria-label="breadcrumb">
@@ -55,11 +56,20 @@ $inStock = (int) $product['stock'] > 0;
             <?php endif; ?>
             <h2 class="h5 mt-3">Mô tả sản phẩm</h2>
             <p class="text-secondary"><?= nl2br($e($product['description'] ?: 'Chưa có mô tả cho sản phẩm này.')) ?></p>
-            <div class="d-flex gap-2 flex-wrap mt-4">
-              <button class="btn btn-secondary" type="button" disabled>Thêm vào giỏ hàng (Bước 4)</button>
+            <div class="d-flex gap-2 flex-wrap mt-4 align-items-end">
+              <?php if ($inStock): ?>
+              <form action="/cart/add" method="post" class="d-flex flex-wrap gap-2 align-items-end">
+                <input type="hidden" name="csrf_token" value="<?= $e(Cart::csrfToken()) ?>">
+                <input type="hidden" name="product_id" value="<?= (int) $product['id'] ?>">
+                <div><label for="quantity" class="form-label small">Số lượng</label><input id="quantity" class="form-control" type="number" name="quantity" min="1" max="<?= min(99, (int) $product['stock']) ?>" value="1" style="width:100px" required></div>
+                <button class="btn btn-primary" type="submit">🛒 Thêm vào giỏ hàng</button>
+              </form>
+              <?php else: ?>
+              <button class="btn btn-secondary" type="button" disabled>Đã hết hàng</button>
+              <?php endif; ?>
               <a class="btn btn-outline-primary" href="/#products">Xem sản phẩm khác</a>
             </div>
-            <p class="small text-secondary mt-3">Chức năng giỏ hàng sẽ được phát triển ở bước tiếp theo.</p>
+            <p class="small text-secondary mt-3">Giỏ hàng lưu tạm bằng PHP Session; chức năng đặt hàng sẽ có ở bước tiếp theo.</p>
           </div>
         </div>
       </div>
