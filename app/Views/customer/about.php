@@ -28,8 +28,7 @@ require __DIR__ . '/partials/header.php';
 <div class="card border-0 shadow-sm"><div class="card-body p-4 p-lg-5">
 <h2 class="h3 fw-bold">Công nghệ xây dựng</h2>
 <p class="text-secondary">PHP, PDO, MySQL, Composer PSR-4, kiến trúc MVC đơn giản và Bootstrap 5.</p>
-<h3 class="h5 fw-bold">Lưu ý</h3>
-<p class="text-secondary mb-0">Đây là website học tập trong môn CT275. Chức năng đặt hàng chưa tích hợp thanh toán trực tuyến, vận chuyển hoặc giao hàng thực tế. Phần Admin và thông tin liên hệ cửa hàng sẽ được hoàn thiện khi các thành viên tích hợp dự án nhóm.</p>
+
 </div></div>
 </main>
 <?php require __DIR__ . '/partials/footer.php'; ?>
