@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 use App\Support\Cart;
+use App\Support\Auth;
 $e = static fn ($value): string => htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 $money = static fn ($value): string => number_format((float) $value, 0, ',', '.') . ' ₫';
 ?>
@@ -37,6 +38,18 @@ $money = static fn ($value): string => number_format((float) $value, 0, ',', '.'
           <li class="nav-item"><a class="nav-link" href="#products">Sản phẩm</a></li>
           <li class="nav-item"><a class="nav-link" href="#about">Giới thiệu</a></li>
           <li class="nav-item"><a class="nav-link" href="/cart">🛒 Giỏ hàng (<?= Cart::count() ?>)</a></li>
+          <?php if (Auth::userId() === null): ?>
+            <li class="nav-item"><a class="nav-link" href="/login">Đăng nhập</a></li>
+            <li class="nav-item"><a class="nav-link" href="/register">Đăng ký</a></li>
+          <?php else: ?>
+            <li class="nav-item"><a class="nav-link" href="/orders">Đơn hàng của tôi</a></li>
+            <li class="nav-item">
+              <form method="post" action="/logout" class="d-inline">
+                <input type="hidden" name="csrf_token" value="<?= $e(Cart::csrfToken()) ?>">
+                <button class="btn btn-link nav-link" type="submit">Đăng xuất (<?= $e(Auth::name()) ?>)</button>
+              </form>
+            </li>
+          <?php endif; ?>
         </ul>
       </div>
     </div>
@@ -114,7 +127,7 @@ $money = static fn ($value): string => number_format((float) $value, 0, ',', '.'
       </div>
     <?php endif; ?>
   </section>
-  <section class="container py-4 pb-5" id="about"><div class="p-4 bg-white rounded-4 border"><h2 class="h4 fw-bold">Về 3D Model Shop</h2><p class="text-secondary mb-0">Dự án nhóm môn CT275 – Công nghệ Web. Website sử dụng PHP, PDO, MySQL, Composer và Bootstrap 5. Hiện tại đã có danh mục, tìm kiếm, danh sách, chi tiết sản phẩm và giỏ hàng PHP Session; chức năng đặt hàng sẽ được phát triển tiếp.</p></div></section>
+  <section class="container py-4 pb-5" id="about"><div class="p-4 bg-white rounded-4 border"><h2 class="h4 fw-bold">Về 3D Model Shop</h2><p class="text-secondary mb-0">Dự án nhóm môn CT275 – Công nghệ Web. Website sử dụng PHP, PDO, MySQL, Composer và Bootstrap 5. Hiện tại đã có danh mục, tìm kiếm, danh sách, chi tiết sản phẩm và giỏ hàng PHP Session; đăng ký, đăng nhập và đặt hàng thử nghiệm được xây dựng bằng PHP Session và PDO.</p></div></section>
 </main>
 <footer class="bg-dark text-white-50 py-4"><div class="container d-flex flex-wrap justify-content-between gap-2"><span class="text-white fw-bold">3D MODEL SHOP</span><small>Đồ án CT275 • Website bán mô hình in 3D</small></div></footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
