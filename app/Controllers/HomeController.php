@@ -10,17 +10,21 @@ final class HomeController
 {
     public function index(): void
     {
-        $dbStatus = 'Chưa kết nối';
-        $dbName = 'Chưa xác định';
+        $categories = [];
+        $products = [];
+        $databaseError = false;
 
         try {
             $pdo = Database::connect();
-            $dbName = (string) $pdo->query('SELECT DATABASE()')->fetchColumn();
-            $dbStatus = 'Kết nối thành công';
+            $categories = $pdo->query('SELECT id, name FROM categories ORDER BY name')->fetchAll();
+            $products = $pdo->query(
+                'SELECT p.id, p.name, p.description, p.price, p.stock, p.image, c.name AS category_name
+                 FROM products p INNER JOIN categories c ON c.id = p.category_id
+                 ORDER BY p.id DESC LIMIT 12'
+            )->fetchAll();
         } catch (Throwable $exception) {
-            // Không hiện chi tiết lỗi kết nối chứa thông tin cấu hình cho người dùng.
             error_log($exception->getMessage());
-            $dbStatus = 'Chưa kết nối (xem hướng dẫn cấu hình MySQL)';
+            $databaseError = true;
         }
 
         require dirname(__DIR__) . '/Views/customer/home.php';
