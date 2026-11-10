@@ -98,13 +98,13 @@ $money = static fn ($value): string => number_format((float) $value, 0, ',', '.'
               </div>
               <div class="card-body d-flex flex-column">
                 <span class="text-primary small fw-semibold mb-2"><?= $e($product['category_name']) ?></span>
-                <h3 class="card-title h5"><?= $e($product['name']) ?></h3>
+                <h3 class="card-title h5"><a class="text-decoration-none text-dark" href="/products/<?= (int) $product['id'] ?>"><?= $e($product['name']) ?></a></h3>
                 <p class="text-secondary small flex-grow-1"><?= $e($product['description'] ?? '') ?></p>
                 <div class="d-flex align-items-center justify-content-between mt-2">
                   <strong class="fs-5 text-danger"><?= $money($product['price']) ?></strong>
                   <span class="badge <?= (int) $product['stock'] > 0 ? 'text-bg-success' : 'text-bg-secondary' ?>"><?= (int) $product['stock'] > 0 ? 'Còn hàng' : 'Hết hàng' ?></span>
                 </div>
-                <div class="small text-secondary mt-2">Chi tiết và giỏ hàng sẽ bổ sung ở bước sau.</div>
+                <a class="btn btn-outline-primary mt-3" href="/products/<?= (int) $product['id'] ?>">Xem chi tiết sản phẩm</a>
               </div>
             </article>
           </div>
@@ -112,7 +112,7 @@ $money = static fn ($value): string => number_format((float) $value, 0, ',', '.'
       </div>
     <?php endif; ?>
   </section>
-  <section class="container py-4 pb-5" id="about"><div class="p-4 bg-white rounded-4 border"><h2 class="h4 fw-bold">Về 3D Model Shop</h2><p class="text-secondary mb-0">Dự án nhóm môn CT275 – Công nghệ Web. Website sử dụng PHP, PDO, MySQL, Composer và Bootstrap 5. Hiện tại đã có danh mục, tìm kiếm và danh sách sản phẩm; các chức năng đặt hàng sẽ được phát triển tiếp.</p></div></section>
+  <section class="container py-4 pb-5" id="about"><div class="p-4 bg-white rounded-4 border"><h2 class="h4 fw-bold">Về 3D Model Shop</h2><p class="text-secondary mb-0">Dự án nhóm môn CT275 – Công nghệ Web. Website sử dụng PHP, PDO, MySQL, Composer và Bootstrap 5. Hiện tại đã có danh mục, tìm kiếm, danh sách và chi tiết sản phẩm; chức năng giỏ hàng và đặt hàng sẽ được phát triển tiếp.</p></div></section>
 </main>
 <footer class="bg-dark text-white-50 py-4"><div class="container d-flex flex-wrap justify-content-between gap-2"><span class="text-white fw-bold">3D MODEL SHOP</span><small>Đồ án CT275 • Website bán mô hình in 3D</small></div></footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
