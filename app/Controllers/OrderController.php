@@ -25,6 +25,11 @@ final class OrderController
             $pdo = Database::connect();
             $items = $this->loadItems($pdo, $cart, false);
             $total = $this->total($items);
+        } catch (RuntimeException $exception) {
+            // Lỗi nghiệp vụ như hết hàng không phải lỗi máy chủ.
+            Cart::message('warning', 'Giỏ hàng đã thay đổi hoặc có sản phẩm hết hàng. Vui lòng kiểm tra lại.');
+            header('Location: /cart', true, 303);
+            return;
         } catch (Throwable $exception) {
             error_log($exception->getMessage());
             http_response_code(503);
