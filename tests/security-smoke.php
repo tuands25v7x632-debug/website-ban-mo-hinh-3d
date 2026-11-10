@@ -8,6 +8,7 @@ use App\Support\Cart;
 
 ini_set('session.use_strict_mode', '1');
 session_start();
+ob_start(); // Không gửi output trước session_regenerate_id() trong bài test.
 
 function verify(bool $condition, string $label): void
 {
