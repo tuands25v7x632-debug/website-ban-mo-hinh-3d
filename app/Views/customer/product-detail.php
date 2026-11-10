@@ -21,13 +21,13 @@ $inStock = (int) $product['stock'] > 0;
 </head>
 <body>
   <nav class="navbar navbar-expand navbar-dark bg-dark">
-    <div class="container"><a class="navbar-brand fw-bold" href="/">3D MODEL SHOP</a><div class="d-flex gap-3"><a class="nav-link text-light" href="/#products">Sản phẩm</a><a class="nav-link text-light" href="/cart">🛒 Giỏ hàng (<?= Cart::count() ?>)</a></div></div>
+    <div class="container"><a class="navbar-brand fw-bold" href="/">3D MODEL SHOP</a><div class="d-flex gap-3"><a class="nav-link text-light" href="/products">Sản phẩm</a><a class="nav-link text-light" href="/cart">🛒 Giỏ hàng (<?= Cart::count() ?>)</a></div></div>
   </nav>
   <main class="container py-4 py-lg-5">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
-        <li class="breadcrumb-item"><a href="/?category=<?= (int) $product['category_id'] ?>#products"><?= $e($product['category_name']) ?></a></li>
+        <li class="breadcrumb-item"><a href="/products?category=<?= (int) $product['category_id'] ?>"><?= $e($product['category_name']) ?></a></li>
         <li class="breadcrumb-item active" aria-current="page"><?= $e($product['name']) ?></li>
       </ol>
     </nav>
@@ -67,7 +67,7 @@ $inStock = (int) $product['stock'] > 0;
               <?php else: ?>
               <button class="btn btn-secondary" type="button" disabled>Đã hết hàng</button>
               <?php endif; ?>
-              <a class="btn btn-outline-primary" href="/#products">Xem sản phẩm khác</a>
+              <a class="btn btn-outline-primary" href="/products">Xem sản phẩm khác</a>
             </div>
             <p class="small text-secondary mt-3">Giỏ hàng lưu tạm bằng PHP Session. Sau khi thêm sản phẩm, vào giỏ hàng để đặt hàng.</p>
           </div>

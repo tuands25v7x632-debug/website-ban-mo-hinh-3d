@@ -34,9 +34,9 @@ $money = static fn ($value): string => number_format((float) $value, 0, ',', '.'
       <div class="collapse navbar-collapse" id="mainNav">
         <ul class="navbar-nav ms-auto gap-lg-3">
           <li class="nav-item"><a class="nav-link active" href="/">Trang chủ</a></li>
-          <li class="nav-item"><a class="nav-link" href="#categories">Danh mục</a></li>
-          <li class="nav-item"><a class="nav-link" href="#products">Sản phẩm</a></li>
-          <li class="nav-item"><a class="nav-link" href="#about">Giới thiệu</a></li>
+          <li class="nav-item"><a class="nav-link" href="/categories">Danh mục</a></li>
+          <li class="nav-item"><a class="nav-link" href="/products">Sản phẩm</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about">Giới thiệu</a></li>
           <li class="nav-item"><a class="nav-link" href="/cart">🛒 Giỏ hàng (<?= Cart::count() ?>)</a></li>
           <?php if (Auth::userId() === null): ?>
             <li class="nav-item"><a class="nav-link" href="/login">Đăng nhập</a></li>
@@ -63,7 +63,7 @@ $money = static fn ($value): string => number_format((float) $value, 0, ',', '.'
           <span class="badge bg-light text-dark mb-3">Mô hình in 3D • Sáng tạo không giới hạn</span>
           <h1 class="display-5 fw-bold mb-3">Biến ý tưởng thành những mô hình độc đáo</h1>
           <p class="lead opacity-75">Khám phá mô hình nhân vật, xe và đồ trang trí được thiết kế cho người yêu công nghệ in 3D.</p>
-          <a href="#products" class="btn btn-warning btn-lg fw-semibold mt-2">Khám phá sản phẩm</a>
+          <a href="/products" class="btn btn-warning btn-lg fw-semibold mt-2">Khám phá sản phẩm</a>
         </div>
         <div class="col-lg-4 text-center" aria-hidden="true"><div class="hero-mark">🧩</div></div>
       </div>
@@ -72,12 +72,12 @@ $money = static fn ($value): string => number_format((float) $value, 0, ',', '.'
   <section class="container pb-4" id="categories">
     <div class="d-flex align-items-end justify-content-between mb-3">
       <div><p class="text-primary fw-semibold mb-1">Khám phá</p><h2 class="h3 fw-bold mb-0">Danh mục mô hình 3D</h2></div>
-      <a href="/#products" class="text-decoration-none">Tất cả sản phẩm</a>
+      <a href="/products" class="text-decoration-none">Tất cả sản phẩm</a>
     </div>
     <div class="row g-3">
       <?php foreach ($categories as $category): ?>
         <div class="col-sm-6 col-lg-4">
-          <a class="category-tile d-block card border-0 shadow-sm p-4 h-100" href="/?category=<?= (int) $category['id'] ?>#products">
+          <a class="category-tile d-block card border-0 shadow-sm p-4 h-100" href="/products?category=<?= (int) $category['id'] ?>">
             <div class="fs-2 mb-2">📦</div>
             <h3 class="h5 mb-1"><?= $e($category['name']) ?></h3>
             <span class="text-secondary small">Xem sản phẩm →</span>
@@ -90,7 +90,7 @@ $money = static fn ($value): string => number_format((float) $value, 0, ',', '.'
     <div class="mb-3">
       <p class="text-primary fw-semibold mb-1">Cửa hàng</p><h2 class="h3 fw-bold">Sản phẩm của chúng tôi</h2>
     </div>
-    <form class="row g-2 mb-4" action="/" method="get">
+    <form class="row g-2 mb-4" action="/products" method="get">
       <div class="col-md-6"><label class="visually-hidden" for="search">Tìm sản phẩm</label><input id="search" type="search" class="form-control" name="q" placeholder="Tìm theo tên sản phẩm..." value="<?= $e($query) ?>" maxlength="100"></div>
       <div class="col-md-4"><label class="visually-hidden" for="category">Danh mục</label><select id="category" class="form-select" name="category"><option value="">Tất cả danh mục</option><?php foreach ($categories as $category): ?><option value="<?= (int) $category['id'] ?>" <?= $selectedCategory === (int) $category['id'] ? 'selected' : '' ?>><?= $e($category['name']) ?></option><?php endforeach; ?></select></div>
       <div class="col-md-2"><button class="btn btn-primary w-100" type="submit">Tìm kiếm</button></div>
@@ -98,7 +98,7 @@ $money = static fn ($value): string => number_format((float) $value, 0, ',', '.'
     <?php if ($databaseError): ?>
       <div class="alert alert-warning" role="alert">Chưa kết nối được cơ sở dữ liệu. Hãy kiểm tra file config/database.php và máy chủ MySQL.</div>
     <?php elseif (!$products): ?>
-      <div class="alert alert-info">Chưa tìm thấy sản phẩm phù hợp. <a href="/">Xem tất cả sản phẩm</a>.</div>
+      <div class="alert alert-info">Chưa tìm thấy sản phẩm phù hợp. <a href="/products">Xem tất cả sản phẩm</a>.</div>
     <?php else: ?>
       <div class="row g-4">
         <?php foreach ($products as $product): ?>
@@ -127,7 +127,7 @@ $money = static fn ($value): string => number_format((float) $value, 0, ',', '.'
       </div>
     <?php endif; ?>
   </section>
-  <section class="container py-4 pb-5" id="about"><div class="p-4 bg-white rounded-4 border"><h2 class="h4 fw-bold">Về 3D Model Shop</h2><p class="text-secondary mb-0">Dự án nhóm môn CT275 – Công nghệ Web. Website sử dụng PHP, PDO, MySQL, Composer và Bootstrap 5. Hiện tại đã có danh mục, tìm kiếm, danh sách, chi tiết sản phẩm và giỏ hàng PHP Session; đăng ký, đăng nhập và đặt hàng thử nghiệm được xây dựng bằng PHP Session và PDO.</p></div></section>
+  <section class="container py-4 pb-5" id="about"><div class="p-4 bg-white rounded-4 border"><h2 class="h4 fw-bold">Về 3D Model Shop</h2><p class="text-secondary mb-0">Dự án nhóm môn CT275 – Công nghệ Web, sử dụng PHP, PDO, MySQL, Composer và Bootstrap 5. <a href="/about">Tìm hiểu thêm về dự án</a>.</p></div></section>
 </main>
 <footer class="bg-dark text-white-50 py-4"><div class="container d-flex flex-wrap justify-content-between gap-2"><span class="text-white fw-bold">3D MODEL SHOP</span><small>Đồ án CT275 • Website bán mô hình in 3D</small></div></footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
