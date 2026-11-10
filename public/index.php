@@ -17,6 +17,8 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 use App\Controllers\HomeController;
 use App\Controllers\ProductController;
 use App\Controllers\CartController;
+use App\Controllers\AuthController;
+use App\Controllers\OrderController;
 
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
@@ -42,6 +44,37 @@ if (is_string($path) && isset($cartActions[$path])) {
     }
     (new CartController())->{$cartActions[$path]}();
     exit;
+}
+$auth = new AuthController();
+if ($path === '/register') {
+    if ($method === 'GET') { $auth->registerForm(); exit; }
+    if ($method === 'POST') { $auth->register(); exit; }
+}
+if ($path === '/login') {
+    if ($method === 'GET') { $auth->loginForm(); exit; }
+    if ($method === 'POST') { $auth->login(); exit; }
+}
+if ($path === '/logout' && $method === 'POST') {
+    $auth->logout();
+    exit;
+}
+if ($path === '/checkout') {
+    $orders = new OrderController();
+    if ($method === 'GET') { $orders->checkout(); exit; }
+    if ($method === 'POST') { $orders->place(); exit; }
+}
+if ($path === '/orders' && $method === 'GET') {
+    (new OrderController())->index();
+    exit;
+}
+if (is_string($path) && preg_match('~^/orders/([^/]+)/?$~D', $path, $matches) === 1 && $method === 'GET') {
+    (new OrderController())->show($matches[1]);
+    exit;
+}
+if (in_array($path, ['/register', '/login', '/logout', '/checkout', '/orders'], true) && $method !== 'GET' && $method !== 'POST') {
+    http_response_code(405);
+    header('Allow: GET, POST');
+    exit('405 - Method Not Allowed');
 }
 http_response_code(404);
 require dirname(__DIR__) . '/app/Views/customer/not-found.php';
