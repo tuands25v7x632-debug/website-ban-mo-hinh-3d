@@ -18,7 +18,7 @@ final class HomeController
             $selectedCategory = null;
         }
         $query = trim((string) ($_GET['q'] ?? ''));
-        $query = mb_substr($query, 0, 100);
+        $query = function_exists('mb_substr') ? mb_substr($query, 0, 100) : substr($query, 0, 100);
 
         try {
             $pdo = Database::connect();
